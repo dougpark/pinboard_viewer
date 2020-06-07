@@ -1,62 +1,83 @@
-/*
-    #2E2C2F
-    #475B63
-    #729B79
-    #BACDB0
-    #F3E8EE
-
-
-
-*/
-
+@import "ios.css";
 
 body {
-    background-color: #2e2c2f;
-    color: white;
+    background-color: var(--ios-dark-secondarySystemBackground);
+    /* #1E1E1E; */
+    color: var(--ios-dark-lightText);
+    /* #ffffff99; */
+    font-family: -apple-system;
 }
 
 table {
     table-layout: fixed;
-    xwidth: 500px;
+    max-width: 100%;
+    display: table;
+    overflow: hidden;
+    margin-right: 6px;
+
 }
 
 th,
 td {
-    overflow: hidden;
-    padding: 0px;
-    padding-left: 8px;
+
+    padding: 6px;
+
+
+    height: 50px;
+    vertical-align: bottom;
     text-align: left;
+    border-bottom: 1px solid var(--ios-dark-separator);
+    /* #54545899; */
+
 }
 
 a {
-    color: #ccc;
+    color: var(--ios-dark-lightText);
+    /* #ffffff99; */
 }
 
 a:hover {
-    color: black;
+    color: var(--ios-dark-systemGreen);
+    /* #30d158ff; */
+    text-decoration: none;
+
 }
 
+
 tr:nth-child(even) {
-    background-color: #1E1E1E;
-    color: #DCBA73;
+    background-color: var(--ios-dark-systemGray6);
+    /* #222222; */
+
 }
 
 tr:nth-child(odd) {
-    background-color: #1E1E1E;
-    color: #8ADDFF;
+    xbackground-color: #8e8e93ff;
+    xcolor: #0a84ffff;
 
 }
 
 tr:hover {
-    background-color: #E9EDDE;
-    color: black;
+    background-color: var(--ios-dark-separator);
+    /* #54545899; */
+    xcolor: black;
 }
 
 .small {
-    font-weight: bold;
+    xfont-weight: bold;
     font-size: .8em;
+    height: 1em;
+
 }
 
 .desc {
-    height: 1em;
+    xheight: 4em;
+
+
+}
+
+.fa-user-tag,
+.fa-user,
+.fa-user-lock,
+.navbar-toggler-icon {
+    color: var(--ios-dark-systemGreen);
 }

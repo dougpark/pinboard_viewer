@@ -54,9 +54,18 @@ if (!empty($feeds)) {
             //if ($i >= 50) break;
         ?>
             <tr>
-                <td>
-                    <div class="desc"><span class="small"><?php echo $host . ' [' . $pubDate . ']' ?></span></div>
-                    <div class="descs"> <a class="feed_title" target="_blank" href="javascript:openWin('<?php echo $link; ?>'); "><?php echo $title; ?></a></div>
+                <td class="text-nowrap">
+                    <a class="feed_title" target="_blank" href="javascript:openWin('<?php echo $link; ?>'); ">
+
+                        <div class="desc">
+                            <span class="small">
+                                <?php echo $host . ' [' . $pubDate . ']' ?>
+                            </span>
+                        </div>
+                        <div class="descs">
+                            <?php echo $title; ?>
+                        </div>
+                    </a>
 
                 </td>
                 <!-- <td><?php echo $description; ?></td> -->
