@@ -1,0 +1,62 @@
+/*
+    #2E2C2F
+    #475B63
+    #729B79
+    #BACDB0
+    #F3E8EE
+
+
+
+*/
+
+
+body {
+    background-color: #2e2c2f;
+    color: white;
+}
+
+table {
+    table-layout: fixed;
+    xwidth: 500px;
+}
+
+th,
+td {
+    overflow: hidden;
+    padding: 0px;
+    padding-left: 8px;
+    text-align: left;
+}
+
+a {
+    color: #ccc;
+}
+
+a:hover {
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: #1E1E1E;
+    color: #DCBA73;
+}
+
+tr:nth-child(odd) {
+    background-color: #1E1E1E;
+    color: #8ADDFF;
+
+}
+
+tr:hover {
+    background-color: #E9EDDE;
+    color: black;
+}
+
+.small {
+    font-weight: bold;
+    font-size: .8em;
+}
+
+.desc {
+    height: 1em;
+}

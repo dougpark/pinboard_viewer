@@ -1,0 +1,1 @@
+javascript: void(open('https://localhost/_pinboard_viewer', 'Pinboard', 'toolbar=no,width=500,height=700'));
