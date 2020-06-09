@@ -39,6 +39,7 @@ if (!empty($feeds)) {
             if ($title == 'Twitter') {
                 $title = 'Twitter: ' . $description;
             }
+            //$title = substr($title, 0, 45);
 
             // crazy namespace logic goes here
             // https://www.sitepoint.com/simplexml-and-namespaces/
@@ -54,7 +55,7 @@ if (!empty($feeds)) {
             //if ($i >= 50) break;
         ?>
             <tr>
-                <td class="text-nowrap">
+                <td class="text-nowrap p-1">
                     <a class="feed_title" target="_blank" href="javascript:openWin('<?php echo $link; ?>'); ">
 
                         <div class="desc">
@@ -63,7 +64,7 @@ if (!empty($feeds)) {
                             </span>
                         </div>
                         <div class="descs">
-                            <?php echo $title; ?>
+                            <span class=""><?php echo $title; ?></span>
                         </div>
                     </a>
 

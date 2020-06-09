@@ -1,3 +1,11 @@
+/*
+
+curl https://api.pinboard.in/v1/posts/recent/?auth_token=parkdn:25B74F40CD4358B19F5A
+
+
+
+*/
+
 javascript: q = location.href;
 if (document.getSelection) {
     d = document.getSelection();
@@ -36,7 +44,7 @@ void(open('https://pinboard.in/add?url=' + encodeURIComponent(q) + '&description
 https: //pinboard.in/export/format:json/
 
 
-javascript: q = location.href;
+    javascript: q = location.href;
 if (document.getSelection) {
     d = document.getSelection();
 } else {
