@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 
@@ -12,8 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
     <!-- Font Awsome GET YOUR OWN KEY -->
     <script src="https://kit.fontawesome.com/10207a6b26.js" crossorigin="anonymous"></script>
 
@@ -30,21 +32,24 @@
     <nav class="navbar  navbar-dark bg-dark  sticky-top mx-auto px-1">
 
 
-        <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#main_nav"
-            aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button class="nav-link btn btn-dark" onclick="javascript:window.location.assign('?q=u:parkdn/unread')"
-            type="button" aria-expanded="false" aria-label="Top">
-            <span class="fas fa-user-tag"></span>
+        <button class="nav-link btn btn-dark" onclick="javascript:popHistory();" type="button" aria-expanded="false" aria-label="Top">
+            <span class="fas fa-chevron-left"></span>
         </button>
+
         <button class="nav-link btn btn-dark" onclick="
-            javascript:window.location.assign('?q=u:parkdn')" type="button" aria-expanded="false" aria-label="Random">
+            javascript:getRecent();" type="button" aria-expanded="false" aria-label="Random">
             <span class="fas fa-user"></span>
         </button>
-        <button class="nav-link btn btn-dark" onclick="javascript:window.location.assign('?q=u:parkdn/private')"
-            type="button" aria-expanded="false" aria-label="Random">
+
+        <button class="nav-link btn btn-dark" onclick="javascript:getTagCloud();" type="button" aria-expanded="false" aria-label="Top">
+            <span class="fas fa-tags"></span>
+        </button>
+
+        <button class="nav-link btn btn-dark" onclick="javascript:getRecent();" type="button" aria-expanded="false" aria-label="Random">
             <span class="fas fa-user-lock"></span>
         </button>
 
@@ -115,7 +120,7 @@
     <div class="container ">
         <div class="row justify-content-center">
             <div class="col-lg-6 ">
-                <div id="rssOutput">Pinboard viewer loading...</div>
+                <div id="output">Pinboard viewer loading...</div>
             </div>
         </div>
     </div>

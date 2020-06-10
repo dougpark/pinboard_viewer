@@ -35,7 +35,7 @@ a {
 }
 
 a:hover {
-    color: var(--ios-systemGreen);
+    color: var(--ios-Text);
     /* #30d158ff; */
     text-decoration: none;
 
@@ -55,7 +55,7 @@ tr:nth-child(even) {
 } */
 
 tr:hover {
-    background-color: var(--ios-separator);
+    /* background-color: var(--ios-separator); */
     /* #54545899; */
     /* xcolor: black; */
 }
@@ -67,13 +67,39 @@ tr:hover {
 
 }
 
+.title {
+    font-size: 1em;
+    color: var(--ios-label);
+}
+
 /* .desc {
     xheight: 4em;
 
 
 } */
 
-.fa-user-tag,
+.h1 {
+    font-size: 2em;
+}
+
+.h9 {
+    font-size: .3em;
+}
+
+input {
+    background-color: var(--ios-systemGray4);
+    border: 0px;
+    display: none;
+}
+
+.formatDate,
+.formatHost,
+.formatTags {
+    color: var(--ios-systemBlue);
+}
+
+.fa-chevron-left,
+.fa-tags,
 .fa-user,
 .fa-user-lock,
 .navbar-toggler-icon {

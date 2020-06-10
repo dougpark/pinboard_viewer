@@ -4,9 +4,9 @@
 
 $params = "";
 
-// https://api.pinboard.in/v1/posts/recent/?auth_token=parkdn:25B74F40CD4358B19F5A&format=json
+// https://api.pinboard.in/v1/posts/recent/?auth_token=xxx&format=json
 
-$apiToken = "parkdn:25B74F40CD4358B19F5A";
+$apiToken = "";
 
 // return all tags
 $query = "tags/get";

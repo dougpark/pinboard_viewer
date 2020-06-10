@@ -1,3 +1,9 @@
+// global user
+
+let user = {};
+let history = [];
+let cache = {};
+
 // this runs when page is finished loading
 $(document).ready(function () {
 
@@ -8,19 +14,26 @@ $(document).ready(function () {
     let url = new URL(window.location.href);
     let searchParams = new URLSearchParams(url.search);
 
-    // load default q search term from config.json
+    // load default params from config.json
     $.ajax({
         url: "config.json",
         method: "GET",
         success: function (response) {
 
-            let q = response.q;
+            // get from config file
+            user.userid = response.userid;
+            user.token = response.token;
+
             // url params overide config.json
-            if (searchParams.get('q')) {
-                q = searchParams.get('q');
+            if (searchParams.get('userid')) {
+                user.userid = searchParams.get('userid');
+            };
+            if (searchParams.get('token')) {
+                user.token = searchParams.get('token');
             };
 
-            showRSS(q);
+            getRecent();
+            //getByDate(userid, token, '2020-06-07');
         }
     });
 
@@ -33,7 +46,7 @@ $(document).ready(function () {
         let up = [0, 37, 38, 65, 87];
         let down = [0, 32, 39, 40, 68, 83];
         let r = [0, 82];
-        console.log(e.keyCode);
+        //console.log(e.keyCode);
         if (up.indexOf(e.keyCode) > 0) {
             scrollDir(-1);
         } else if (down.indexOf(e.keyCode) > 0) {
@@ -46,15 +59,230 @@ $(document).ready(function () {
 
 })
 
+function popHistory() {
+
+    if (history.length > 1) {
+
+        let prev = history.pop(); // current location
+        prev = history.pop(); // prev location
+
+        if (prev.loc) {
+            switch (prev.loc) {
+                case 'getRecent':
+                    getRecent();
+                    break;
+                case 'getTagCloud':
+                    getTagCloud();
+                    break;
+                case 'getByDate':
+                    getByDate(prev.date);
+                    break;
+                case 'getByTag':
+                    getByTag(prev.tag);
+                    break;
+                case 'getByHost':
+                    getByHost(prev.host);
+                    break;
+                default:
+                    getRecent();
+            }
+        } else {
+            getRecent();
+        }
+    }
+
+}
+
+function inCache(data) {
+    // if key exists use it
+    if (cache[data.key]) {
+        document.getElementById("output").innerHTML = cache[data.key];
+        console.log('used the cache');
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function addCache(data) {
+    cache[data.key] = data.data;
+    console.log(cache);
+
+    // when to clear the cace
+    // check if cache has date
+    // if no date then get date from pinboard and return
+    // 
+    // if yes date then get date from pinboard and see if newer
+    // if newer then clear cache
+}
+
+function pushHistory(data) {
+    history.push(data);
+}
+
+
+
 // call the php code to run the pinboard query
-function showRSS(str) {
+function getRecent() {
+    pushHistory({
+        loc: 'getRecent'
+    });
+
+    if (inCache({
+            key: 'getRecent'
+        })) {
+        return;
+    }
 
     $.ajax({
-        url: "getrss.php?q=" + str,
-        method: "GET",
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            action: 'getRecent'
+        },
         success: function (response) {
 
-            document.getElementById("rssOutput").innerHTML = response;
+            addCache({
+                key: 'getRecent',
+                data: response
+            })
+            document.getElementById("output").innerHTML = response;
+
+        }
+    });
+
+}
+
+
+function getTagCloud(count = 100) {
+    pushHistory({
+        loc: 'getTagCloud'
+    });
+
+    if (inCache({
+            key: 'getTagCloud'
+        })) {
+        return;
+    }
+
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            count: count,
+            action: 'getTagCloud'
+        },
+        success: function (response) {
+
+            addCache({
+                key: 'getTagCloud',
+                data: response
+            })
+
+            document.getElementById("output").innerHTML = response;
+
+        }
+    });
+
+}
+
+
+
+function getByDate(date) {
+    pushHistory({
+        loc: 'getByDate',
+        date: date
+    });
+
+    if (inCache({
+            key: date
+        })) {
+        return;
+    }
+
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            date: date,
+            action: 'getByDate'
+        },
+        success: function (response) {
+
+            addCache({
+                key: date,
+                data: response
+            })
+
+            document.getElementById("output").innerHTML = response;
+
+        }
+    });
+
+}
+
+// pinboard api seems to be case SENSITIVE for tag queries
+function getByTag(tag) {
+    pushHistory({
+        loc: 'getByTag',
+        tag: tag
+    });
+
+    if (inCache({
+            key: tag
+        })) {
+        return;
+    }
+
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            tag: tag,
+            action: 'getByTag'
+        },
+        success: function (response) {
+
+            addCache({
+                key: tag,
+                data: response
+            })
+
+            document.getElementById("output").innerHTML = response;
+
+        }
+    });
+
+}
+
+function getByHost(host) {
+    pushHistory({
+        loc: 'getByHost',
+        host: host
+    });
+
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            host: host,
+            action: 'getByHost'
+        },
+        success: function (response) {
+
+            // scan results to match host
+
+            document.getElementById("output").innerHTML = response;
 
         }
     });
@@ -68,6 +296,7 @@ function openWin(url) {
     if (window.innerWidth < 550) {
         opt = "_blank";
     }
+    opt = "_blank"; // see if we like this
     setTimeout(window.close, 10);
     open(url, opt);
 }

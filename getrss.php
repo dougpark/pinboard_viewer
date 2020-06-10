@@ -4,7 +4,7 @@
 // q = t:javascript/
 // q = secret:xxxxxxx/u:pinboarduser/
 
-//https://feeds.pinboard.in/rss/secret:1655b6cd9dfd61147582/u:parkdn/t:javascript/
+//https://feeds.pinboard.in/rss/secret:key/u:user/t:javascript/
 
 $q = $_GET["q"];
 if ($q == '') {

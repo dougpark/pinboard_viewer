@@ -1,6 +1,6 @@
 /*
 
-curl https://api.pinboard.in/v1/posts/recent/?auth_token=parkdn:25B74F40CD4358B19F5A
+curl https://api.pinboard.in/v1/posts/recent/?auth_token=xxx
 
 
 
