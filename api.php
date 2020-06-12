@@ -27,6 +27,8 @@ if ($action == '') {
     $action = $config->action;
 }
 
+$pref = (object) (isset($_POST['pref']) ? $_POST['pref'] : null);
+
 // init Pinboard api
 $pinboard = new PinboardAPI($userid, $token);
 
@@ -61,7 +63,7 @@ echo $out;
 
 function getRecent($count = 100)
 {
-    global $pinboard;
+    global $pinboard, $pref;
 
     $bookmarks = $pinboard->get_recent($count);
 
@@ -72,7 +74,7 @@ function getRecent($count = 100)
 
 function getTagCloud()
 {
-    global $pinboard;
+    global $pinboard, $pref;
 
     $tags = $pinboard->get_tags();
     $output = formatTagCloud($tags, 'Tags');
@@ -81,7 +83,7 @@ function getTagCloud()
 
 function getByDate()
 {
-    global $pinboard;
+    global $pinboard, $pref;
 
     $date = $_POST['date'];
     $bookmarks = $pinboard->search_by_date($date);
@@ -92,7 +94,7 @@ function getByDate()
 
 function getByHost()
 {
-    global $pinboard;
+    global $pinboard, $pref;
 
     $host = $_POST['host'];
     $bookmarks = $pinboard->search_by_url($host);
@@ -102,7 +104,10 @@ function getByHost()
 
 function getByTag()
 {
-    global $pinboard;
+    global $pinboard, $pref;
+
+    $pref = (object) $_POST['pref'];
+    var_dump($pref->priTag);
 
     $tag = $_POST['tag'];
     $bookmarks = $pinboard->search_by_tag($tag);
@@ -133,6 +138,8 @@ function formatBookmarks($bookmarks, $heading)
         if ($title == 'Twitter') {
             $title = 'Twitter: ' . $description;
         }
+
+        // cool way to trim a string at a word break
         if (strlen($title) > 100) {
             $s = substr($title, 0, 100);
             $title = substr($s, 0, strrpos($s, ' ')) . '...';
@@ -176,6 +183,8 @@ function formatBookmarks($bookmarks, $heading)
 
 function formatTagCloud($tags, $heading)
 {
+    global $pref;
+
     $l = sizeof($tags);
     $output =  "<div class='text-center'><span class='h1 text-white'>$heading</span>";
     $output .= "<span class='h9 text-white'>$l</span></div><br>";
@@ -185,7 +194,7 @@ function formatTagCloud($tags, $heading)
 
     foreach ($tags as $tag) {
 
-        if ($tag->count > 1) {
+        if ($tag->count >= $pref->priTag) {
             $ntag = "'" . trim($tag->tag) . "'";
             $taglink = "javascript:getByTag($ntag);";
 
@@ -199,6 +208,32 @@ function formatTagCloud($tags, $heading)
             $output .= "  </a>";
         }
     }
+    $output .= "<hr>";
+
+    foreach ($tags as $tag) {
+
+        if ($tag->count >= 1 && $tag->count < $pref->priTag) {
+
+            if ($tag->count <= $pref->lowTag) {
+                $color = "badge-info";
+            } else {
+                $color = "badge-danger";
+            }
+            $ntag = "'" . trim($tag->tag) . "'";
+            $taglink = "javascript:getByTag($ntag);";
+
+            $output .= "  <a class='m-1 btn btn-dark' href=$taglink role='button'>";
+
+            $output .= "   <span class='title'>";
+            $output .= "    <span>" . $tag->tag . "</span>";
+            $output .= "    <span class='badge $color mb-2'>" . $tag->count . "</span>";
+            $output .= "   </span>";
+
+            $output .= "  </a>";
+        }
+    }
+
+
 
 
 

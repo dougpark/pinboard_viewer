@@ -3,6 +3,12 @@
 let user = {};
 let history = [];
 let cache = {};
+let config = {};
+
+let pref = {};
+pref.priTag = 5;
+pref.lowTag = 1;
+pref.tagMax = 100;
 
 // this runs when page is finished loading
 $(document).ready(function () {
@@ -31,6 +37,8 @@ $(document).ready(function () {
             if (searchParams.get('token')) {
                 user.token = searchParams.get('token');
             };
+
+            config = response;
 
             getRecent();
             //getByDate(userid, token, '2020-06-07');
@@ -140,7 +148,8 @@ function getRecent() {
         data: {
             userid: user.userid,
             token: user.token,
-            action: 'getRecent'
+            action: 'getRecent',
+            pref: pref,
         },
         success: function (response) {
 
@@ -173,8 +182,9 @@ function getTagCloud(count = 100) {
         data: {
             userid: user.userid,
             token: user.token,
-            count: count,
-            action: 'getTagCloud'
+            max: pref.tagMax,
+            action: 'getTagCloud',
+            pref: pref,
         },
         success: function (response) {
 
@@ -211,7 +221,8 @@ function getByDate(date) {
             userid: user.userid,
             token: user.token,
             date: date,
-            action: 'getByDate'
+            action: 'getByDate',
+            pref: pref,
         },
         success: function (response) {
 
@@ -247,7 +258,8 @@ function getByTag(tag) {
             userid: user.userid,
             token: user.token,
             tag: tag,
-            action: 'getByTag'
+            action: 'getByTag',
+            pref: pref,
         },
         success: function (response) {
 
@@ -276,7 +288,8 @@ function getByHost(host) {
             userid: user.userid,
             token: user.token,
             host: host,
-            action: 'getByHost'
+            action: 'getByHost',
+            pref: pref,
         },
         success: function (response) {
 
