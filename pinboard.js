@@ -1,10 +1,14 @@
 /*
 
+code parts
+
+
+
 curl https://api.pinboard.in/v1/posts/recent/?auth_token=xxx
 
 
 
-*/
+
 
 javascript: q = location.href;
 if (document.getSelection) {
@@ -62,3 +66,11 @@ javascript: q = location.href;
 if (document.getSelection) % 7 Bd = document.getSelection(); % 7 Delse % 7 Bd = ''; % 7 D;
 p = document.title;
 void(open('https://pinboard.in/add?url=' + encodeURIComponent(q) + '&description=' + encodeURIComponent(d) + '&title=' + encodeURIComponent(p), 'Pinboard', 'toolbar=no,width=700,height=350'));
+
+
+
+
+
+
+
+*/

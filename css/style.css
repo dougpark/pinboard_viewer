@@ -54,13 +54,13 @@ tr:nth-child(even) {
 
 } */
 
-tr:hover {
-    /* background-color: var(--ios-separator); */
-    /* #54545899; */
-    /* xcolor: black; */
-}
+/*  tr:hover {
+    background-color: var(--ios-separator);
+    #54545899;
+    color: black;
+} */
 
-.small {
+*/ .small {
     /* xfont-weight: bold; */
     font-size: .8em;
     height: 1em;
