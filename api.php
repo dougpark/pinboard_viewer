@@ -107,7 +107,7 @@ function getByTag()
     global $pinboard, $pref;
 
     $pref = (object) $_POST['pref'];
-    var_dump($pref->priTag);
+    // var_dump($pref->priTag);
 
     $tag = $_POST['tag'];
     $bookmarks = $pinboard->search_by_tag($tag);
