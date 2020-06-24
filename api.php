@@ -153,7 +153,7 @@ function formatBookmarks($bookmarks, $heading)
 
         // $output .= "<tr>";
         // $output .= " <td class='text-nowrap p-1'>";
-        $output .= "<div class='border-bottom' >";
+        $output .= "<div class='border-bottom mt-3' >";
         $output .= "  <a class='feed_title' target='_blank' href='" . $link . " '>";
 
         $output .= "   <div class='title'>";

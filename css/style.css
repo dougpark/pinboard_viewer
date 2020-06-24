@@ -93,9 +93,12 @@ input {
 }
 
 .formatDate,
-.formatHost,
-.formatTags {
+.formatHost {
     color: var(--ios-systemBlue);
+}
+
+.formatTags {
+    color: var(--ios-systemPink);
 }
 
 .fa-chevron-left,
