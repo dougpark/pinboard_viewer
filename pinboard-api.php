@@ -99,6 +99,7 @@ class PinboardAPI
         if (!is_null($tags)) $args['tag'] = $this->_normalize_tags($tags);
 
         $json = $this->_remote('posts/recent', $args);
+
         return $this->_json_to_bookmark($json);
     }
 

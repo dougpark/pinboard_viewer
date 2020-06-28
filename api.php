@@ -53,6 +53,12 @@ switch ($action) {
     case 'getTagCloud':
         $out = getTagCloud();
         break;
+    case 'swapPublic':
+        $out = swapPublic();
+        break;
+    case 'swapUnRead':
+        $out = swapUnRead();
+        break;
     default:
         $out = getRecent();
 }
@@ -60,6 +66,54 @@ switch ($action) {
 // all done return results to page
 echo $out;
 
+
+function swapPublic()
+{
+    global $pinboard, $pref;
+
+    $url = $_POST['url'];
+    $output = "swapPublic failed for $url";
+
+    $bookmarks = $pinboard->search_by_url($url);
+    $l = sizeof($bookmarks);
+    foreach ($bookmarks as $bookmark) {
+        $is_public = $bookmark->is_public;
+        if ($is_public == false) {
+            $is_public = true;
+        } else {
+            $is_public = false;
+        }
+        $bookmark->is_public = $is_public;
+        $bookmark->save();
+        $output = "swapPublic ok for $url";
+    }
+
+    return $output;
+}
+
+function swapUnRead()
+{
+    global $pinboard, $pref;
+
+    $url = $_POST['url'];
+    $output = "swapUnRead failed for $url";
+
+    $bookmarks = $pinboard->search_by_url($url);
+    $l = sizeof($bookmarks);
+    foreach ($bookmarks as $bookmark) {
+        $is_unread = $bookmark->is_unread;
+        if ($is_unread == false) {
+            $is_unread = true;
+        } else {
+            $is_unread = false;
+        }
+        $bookmark->is_unread = $is_unread;
+        $bookmark->save();
+        $output = "swapUnRead ok for $url";
+    }
+
+    return $output;
+}
 
 function getRecent($count = 100)
 {
@@ -139,6 +193,11 @@ function formatBookmarks($bookmarks, $heading)
             $title = 'Twitter: ' . $description;
         }
 
+        $unread = formatUnRead($bookmark);
+
+        $public = formatPublic($bookmark);
+
+
         // cool way to trim a string at a word break
         if (strlen($title) > 100) {
             $s = substr($title, 0, 100);
@@ -170,7 +229,12 @@ function formatBookmarks($bookmarks, $heading)
         $output .= $hostLink;
         $output .= $tagLink;
         $output .= "   </div>";
+        $output .= " <div>";
+        $output .=  $public;
+        $output .=  $unread;
+        $output .= " </div>";
         $output .= "</div>";
+        //var_dump($bookmark);
 
         // $output .= " </td>";
         // $output .= "</tr>";
@@ -180,6 +244,38 @@ function formatBookmarks($bookmarks, $heading)
 
     return $output;
 }
+
+function formatUnRead($bookmark)
+{
+    $output = "";
+    $url = $bookmark->url;
+    $unread = $bookmark->is_unread;
+    if ($unread) {
+        $unread = "unread";
+    } else {
+        $unread = "read";
+    }
+
+    $output .= "<span role='button' class='btnUnRead m-1 p-1 btn btn-dark' data-url=$url>$unread</span>";
+
+    return $output;
+};
+
+function formatPublic($bookmark)
+{
+    $output = "";
+    $url = $bookmark->url;
+    $public = $bookmark->is_public;
+    if ($public) {
+        $public = "public";
+    } else {
+        $public = "private";
+    }
+
+    $output .= "<span role='button' class='btnPublic m-1 p-1 btn btn-dark' data-url=$url>$public</span>";
+
+    return $output;
+};
 
 function formatTagCloud($tags, $heading)
 {

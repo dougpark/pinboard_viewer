@@ -40,9 +40,26 @@ $(document).ready(function () {
 
             config = response;
 
-            getRecent();
+            getByTag('start');
+            //getRecent();
             //getByDate(userid, token, '2020-06-07');
         }
+    });
+
+    $(document).on('click', '.btnPublic', function (event) {
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        swapPublic(event.target.dataset.url);
+        console.log('public pressed, url= ' + event.target.dataset.url);
+        //(... rest of your JS code)
+    });
+
+    $(document).on('click', '.btnUnRead', function (event) {
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        swapUnRead(event.target.dataset.url);
+        console.log('unRead pressed, url= ' + event.target.dataset.url);
+        //(... rest of your JS code)
     });
 
 
@@ -67,6 +84,18 @@ $(document).ready(function () {
 
 })
 
+// when user changes any bookmark then clearCache and reload current view
+function reloadCurrent() {
+
+    if (history.length > 0) {
+        let prev = history.pop(); // current location
+        clearCache();
+        doHistory(prev);
+
+    }
+}
+
+// when user clicks back button then pop current location and go back one view
 function popHistory() {
 
     if (history.length > 1) {
@@ -74,38 +103,52 @@ function popHistory() {
         let prev = history.pop(); // current location
         prev = history.pop(); // prev location
 
-        if (prev.loc) {
-            switch (prev.loc) {
-                case 'getRecent':
-                    getRecent();
-                    break;
-                case 'getTagCloud':
-                    getTagCloud();
-                    break;
-                case 'getByDate':
-                    getByDate(prev.date);
-                    break;
-                case 'getByTag':
-                    getByTag(prev.tag);
-                    break;
-                case 'getByHost':
-                    getByHost(prev.host);
-                    break;
-                default:
-                    getRecent();
-            }
-        } else {
-            getRecent();
-        }
+        doHistory(prev);
     }
 
 }
 
+// take action on the selected view from history
+function doHistory(prev) {
+    if (prev.loc) {
+        switch (prev.loc) {
+            case 'getRecent':
+                getRecent();
+                break;
+            case 'getTagCloud':
+                getTagCloud();
+                break;
+            case 'getByDate':
+                getByDate(prev.date);
+                break;
+            case 'getByTag':
+                getByTag(prev.tag);
+                break;
+            case 'getByHost':
+                getByHost(prev.host);
+                break;
+            default:
+                getRecent();
+        }
+    } else {
+        getRecent();
+    }
+}
+
+// any changes to a bookmark must clear the entire cache
+function clearCache() {
+    Object.keys(cache).forEach(function (key) {
+        delete cache[key];
+    });
+
+}
+
+// if key in cache then use it otherwise return false to reload from server
 function inCache(data) {
     // if key exists use it
     if (cache[data.key]) {
         document.getElementById("output").innerHTML = cache[data.key];
-        console.log('used the cache');
+        //console.log('used the cache');
         return true;
     } else {
         return false;
@@ -114,7 +157,7 @@ function inCache(data) {
 
 function addCache(data) {
     cache[data.key] = data.data;
-    console.log(cache);
+    //console.log(cache);
 
     // when to clear the cace
     // check if cache has date
@@ -128,7 +171,53 @@ function pushHistory(data) {
     history.push(data);
 }
 
+// user clicked public button so invert public setting
+function swapPublic(url) {
 
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            max: pref.tagMax,
+            url: url,
+            action: 'swapPublic',
+            pref: pref,
+        },
+        success: function (response) {
+
+            // get current view from cache and show again with updates from server
+            reloadCurrent();
+
+        }
+    });
+
+}
+
+// user clicked unread button so invert unread setting
+function swapUnRead(url) {
+
+    $.ajax({
+        url: "api.php",
+        method: "POST",
+        data: {
+            userid: user.userid,
+            token: user.token,
+            max: pref.tagMax,
+            url: url,
+            action: 'swapUnRead',
+            pref: pref,
+        },
+        success: function (response) {
+
+            // get current view from cache and show again with updates from server
+            reloadCurrent();
+
+        }
+    });
+
+}
 
 // call the php code to run the pinboard query
 function getRecent() {
